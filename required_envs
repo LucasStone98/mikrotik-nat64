@@ -1,0 +1,75 @@
+
+envs for nat64 container
+
+coredns:
+- NAT64_PREFIX
+- UPSTREAM_DNS (optional, default '9.9.9.9')
+- TRANSLATE_ALL (optional, default "true")
+
+radvd-minimal:
+- NAT64_PREFIX
+- LAN_INTERFACE
+3
+radvd-full:
+- NAT64_PREFIX
+- LAN_INTERFACE
+- LAN_PREFIX
+- DNS_IPV6 (Container IP on LAN)
+
+tayga:
+- 64_PREFIX
+
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ipv6check
+;;;
+
+
+=================================
+# --- radvd min ---
+
+interface veth3-NAT64LAN
+{
+        AdvSendAdvert on;
+        AdvDefaultLifetime 0;
+
+        route fd64:cafe::/96
+        {
+                AdvRouteLifetime 1800;
+        };
+
+        nat64prefix fd64:cafe::/96
+        {
+                AdvValidLifetime 1800;
+        };
+};
+
+--------------------
+# --- radvd full ---
+
+interface veth3-NAT64LAN
+{
+      AdvSendAdvert on;
+      AdvManagedFlag off;               # no DHCPv6 for addresses
+      AdvOtherConfigFlag off;       # no DHCPv6 info needed
+
+      # ----- IPv6 prefix for SLAAC -----
+      prefix fd01:a1::/64
+      {
+              AdvOnLink on;
+              AdvAutonomous on;           # enables SLAAC
+              AdvRouterAddr off;
+      };
+
+      # ----- DNS server via RA (RDNSS) -----
+      RDNSS fd01:a1::1
+      {
+              AdvRDNSSLifetime 3600;
+      };
+
+      # ----- Pref64 for clat ----
+      nat64prefix fd64:cafe::/96
+      {
+              AdvValidLifetime 1800;
+      };
+};
+
+------------

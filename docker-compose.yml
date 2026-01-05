@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  nat64:
+    build: .
+    privileged: true
+    ports:
+      - "53:53/udp"
+    environment:
+      - NAT64_PREFIX=fd64:cafe::/96
+      - LAN_INTERFACE=eth0
+      - RADVD_FULL=true
+      - LAN_PREFIX=fd01:a1::/64
+      - DNS_IPV6=fd01:a1::1
+    networks:
+      ipv6net:
+        ipv6_address: fd01:a1::1
+
+networks:
+  ipv6net:
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: fd01:a1::/64
