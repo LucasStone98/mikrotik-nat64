@@ -1,6 +1,6 @@
- ARG TARGETARCH
-
- FROM alpine:latest AS build-env
+  ARG TARGETARCH
+  
+  FROM alpine:latest AS build-env
 
  RUN apk add --no-cache git make g++ linux-headers binutils go
 
