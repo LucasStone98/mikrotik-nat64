@@ -1,0 +1,13 @@
+.git/
+*.log
+.DS_Store
+
+# Go build artifacts
+v6check/v6check
+
+# Docker temp files
+Dockerfile.tmp
+
+# Cache
+.ruff_cache/
+__pycache__/
