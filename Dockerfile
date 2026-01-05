@@ -24,7 +24,7 @@ WORKDIR /app
 
 COPY --from=build-env /app/tayga/tayga /app/tayga
 
-COPY --from=build-env /app/v6check /app/v6check
+COPY --from=build-env /app/v6check/v6check /app/v6check
 
  COPY ./config/ ./
 
