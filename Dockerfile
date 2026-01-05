@@ -12,7 +12,7 @@ RUN git clone --depth=1 https://github.com/apalrd/tayga && \
 
 COPY ./v6check/ /app/v6check/
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -ldflags="-s -w" -o v6check ./v6check/
+RUN cd v6check && go mod init v6check && CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -ldflags="-s -w" -o ../v6check
     
  FROM alpine:latest AS final-image
 
