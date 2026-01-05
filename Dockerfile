@@ -10,9 +10,9 @@ RUN git clone --depth=1 https://github.com/apalrd/tayga && \
     cd tayga && \
     make static
 
-COPY ./v6check/ /app/
+COPY ./v6check/ /app/v6check/
 
- RUN CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -ldflags="-s -w" -o v6check
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -ldflags="-s -w" -o v6check ./v6check/
     
  FROM alpine:latest AS final-image
 
